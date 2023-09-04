@@ -1,33 +1,48 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
+import axios from '../axios';
 
 export const FullPost = () => {
+
+  const [data, setData] = React.useState();
+  const [isLoading, setLoading] = React.useState(true);
+  const { id } = useParams();
+
+  React.useEffect(() => {
+    axios
+      .get(`/news/${id}`)
+      .then(res => {
+        setData(res.data);
+      })
+      .catch(err => {
+        console.warn(err);
+        alert('Ошибка при получении новости')
+      });
+  }, [id]);
+
+  if (isLoading) {
+    return <Post isLoading={isLoading} isFullPost />
+  }
+  
   return (
     <>
       <Post
-        id={1}
-        title="Roast the code #1 | Rock Paper Scissors"
+        id={data._id}
+        title={data.title}
         imageUrl="https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg"
-        user={{
-          avatarUrl:
-            "https://s4.afisha.ru/mediastorage/c7/e9/9a5f0740106d4bc586318d62e9c7.jpg",
-          fullName: "Adam",
-        }}
-        createdAt={"12 июня 2022 г."}
-        viewsCount={150}
+        user={data.user}
+        createdAt={data.createdAt}
+        viewsCount={data.viewsCount}
         commentsCount={3}
-        tags={["react", "fun", "typescript"]}
+        tags={data.tags}
         isFullPost
       >
         <p>
-          Hey there! 👋 I'm starting a new series called "Roast the Code", where
-          I will share some code, and let YOU roast and improve it. There's not
-          much more to it, just be polite and constructive, this is an exercise
-          so we can all learn together. Now then, head over to the repo and
-          roast as hard as you can!!
+          {data.text}
         </p>
       </Post>
       <CommentsBlock
