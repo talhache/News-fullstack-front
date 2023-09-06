@@ -14,8 +14,11 @@ import { fetchNews, fetchTags } from '../features/news.slices';
 export const Home = () => {
 
   const dispatch = useDispatch();
+  
+  const userData = useSelector((state) => state.login.data)
   const news = useSelector((state) => state.news)
   const tags = useSelector(state => state.news)
+
   const isNewsLoading = news.news.status === 'loading';
   const isTagsLoading = tags.tags.status === 'loading';
 
@@ -24,6 +27,8 @@ export const Home = () => {
     dispatch(fetchNews());
     dispatch(fetchTags());
   }, [dispatch])
+
+  console.log(userData)
 
 
   return (
@@ -39,13 +44,13 @@ export const Home = () => {
               <Post
                 id={obj._id}
                 title={obj.title}
-                imageUrl="https://png.pngtree.com/thumb_back/fh260/background/20200714/pngtree-modern-double-color-futuristic-neon-background-image_351866.jpg"
+                imageUrl={obj.imageUrl}
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
                 commentsCount={3}
                 tags={obj.tags}
-                isEditable
+                isEditable={userData?.user._id === obj.user._id}
               />
             )
           )}
