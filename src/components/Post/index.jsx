@@ -28,12 +28,14 @@ export const Post = ({
   if (isLoading) {
     return <PostSkeleton />;
   }
+  const copyUser = {...user}
+  const isOwner = isEditable === copyUser._id
 
   const onClickRemove = () => {};
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
-      {isEditable && (
+      {isOwner && (
         <div className={styles.editButtons}>
           <Link to={`/news/${id}/edit`}>
             <IconButton color="primary">

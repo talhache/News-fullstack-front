@@ -25,8 +25,6 @@ export const FullPost = () => {
       });
   }, [id]);
 
-  console.log(data);
-
   if (isLoading) {
     return <Post isLoading={isLoading} />
   }

@@ -11,10 +11,11 @@ import { CommentsBlock } from '../components/CommentsBlock';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNews, fetchTags } from '../features/news.slices';
 
+
 export const Home = () => {
 
   const dispatch = useDispatch();
-  
+
   const userData = useSelector((state) => state.login.data)
   const news = useSelector((state) => state.news)
   const tags = useSelector(state => state.news)
@@ -28,9 +29,6 @@ export const Home = () => {
     dispatch(fetchTags());
   }, [dispatch])
 
-  console.log(userData)
-
-
   return (
     <>
       <Tabs style={{ marginBottom: 15 }} value={0} aria-label="basic tabs example">
@@ -39,8 +37,8 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
-          {(isNewsLoading ? [...Array(5)] : news.news.items).map((obj, index) =>
-            isNewsLoading ? (<Post key={index} isLoading={true} />) : (
+          {(isNewsLoading ? [...Array(10)] : news.news.items).map((obj, index) => {
+            return (isNewsLoading ? (<Post key={index} isLoading={true} />) : (
               <Post
                 id={obj._id}
                 title={obj.title}
@@ -50,9 +48,10 @@ export const Home = () => {
                 viewsCount={obj.viewsCount}
                 commentsCount={3}
                 tags={obj.tags}
-                isEditable={userData?.user._id === obj.user._id}
+                isEditable={userData.user._id}
               />
-            )
+            ))
+          }
           )}
         </Grid>
         <Grid xs={4} item>
