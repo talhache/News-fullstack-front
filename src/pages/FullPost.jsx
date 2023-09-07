@@ -5,6 +5,7 @@ import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
 import axios from '../axios';
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 export const FullPost = () => {
 
@@ -29,22 +30,21 @@ export const FullPost = () => {
     return <Post isLoading={isLoading} />
   }
   
+        console.log(data.imageUrl);
   return (
     <>
       <Post
         id={data._id}
         title={data.title}
-        imageUrl={data.imageUrl}
+        imageUrl={data.image ? `http://localhost:4444${data.image}` : ''}
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}
         commentsCount={3}
         tags={data.tags}
         isFullPost
-      >
-        <p>
-         ' {data.text}'
-        </p>
+        >
+       <ReactMarkdown children={data.text}/> 
       </Post>
       <CommentsBlock
         items={[

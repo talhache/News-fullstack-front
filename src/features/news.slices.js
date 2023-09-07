@@ -15,6 +15,11 @@ export const fetchNews = createAsyncThunk(
             return data;
         });
 
+    export const fetchRemoveNews = createAsyncThunk('news/delete', async (id) => {
+         axios.delete(`/news/${id}`);
+         return id
+    });
+
 const initialState = {
     news: {
         items: [],
@@ -32,6 +37,7 @@ const newsSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        // Получение статей
         builder.addCase(fetchNews.pending, (state) => {
             state.news.items = [];
             state.news.status = 'loading';
@@ -44,6 +50,7 @@ const newsSlice = createSlice({
             state.news.items = [];
             state.news.status = 'error';
         })
+        //Получение тегов
         .addCase(fetchTags.pending, (state) => {
             state.tags.items = [];
             state.tags.status = 'loading';
@@ -56,6 +63,16 @@ const newsSlice = createSlice({
             state.tags.items = [];
             state.tags.status = 'error';
         })
+        //Удаление статей
+        .addCase(fetchRemoveNews.pending, (state, action) => {
+            state.news.status = 'loading' 
+        })
+        .addCase(fetchRemoveNews.fulfilled, (state, action) => {
+            state.news.items = state.news.items.filter(obj => obj._id !== action.payload);
+            state.news.status = 'loaded';
+        })
+       
+       
 
     }
 });

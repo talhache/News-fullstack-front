@@ -10,6 +10,8 @@ import styles from './Post.module.scss';
 import { UserInfo } from '../UserInfo';
 import { PostSkeleton } from './Skeleton';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchRemoveNews } from '../../features/news.slices';
 
 export const Post = ({
   id,
@@ -25,13 +27,20 @@ export const Post = ({
   isLoading,
   isEditable,
 }) => {
+  const dispatch = useDispatch();
+
   if (isLoading) {
     return <PostSkeleton />;
   }
+
   const copyUser = {...user}
   const isOwner = isEditable === copyUser._id
 
-  const onClickRemove = () => {};
+  const onClickRemove = () => {
+    if (window.confirm('Вы действительно хотите удалить новость?')) {
+      dispatch(fetchRemoveNews(id))
+    }
+  };
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
