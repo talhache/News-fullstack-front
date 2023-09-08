@@ -22,13 +22,14 @@ export const Home = () => {
 
   const isNewsLoading = news.news.status === 'loading';
   const isTagsLoading = tags.tags.status === 'loading';
-
-
+  
+  
   React.useEffect(() => {
     dispatch(fetchNews());
     dispatch(fetchTags());
   }, [dispatch])
-
+  
+  console.log(userData);
   return (
     <>
       <Tabs style={{ marginBottom: 15 }} value={0} aria-label="basic tabs example">
@@ -37,7 +38,7 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
-          {(isNewsLoading ? [...Array(10)] : news.news.items).map((obj, index) => {
+          {(isNewsLoading ? [...Array(5)] : news.news.items).map((obj, index) => {
             return (isNewsLoading ? (<Post key={index} isLoading={true} />) : (
               <Post
                 id={obj._id}
@@ -48,11 +49,11 @@ export const Home = () => {
                 viewsCount={obj.viewsCount}
                 commentsCount={3}
                 tags={obj.tags}
-                isEditable={userData.user._id}
-              />
-            ))
-          }
-          )}
+                isEditable={userData?.user._id === obj.user._id}
+                />
+                ))
+              }
+              )}
         </Grid>
         <Grid xs={4} item>
           <TagsBlock items={tags.tags.items} isLoading={isTagsLoading} />

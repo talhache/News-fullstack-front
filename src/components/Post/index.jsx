@@ -33,10 +33,7 @@ export const Post = ({
     return <PostSkeleton />;
   }
 
-  const copyUser = {...user}
-  const isOwner = isEditable === copyUser._id
-
-  const onClickRemove = () => {
+  const onClickRemove = (id) => {
     if (window.confirm('Вы действительно хотите удалить новость?')) {
       dispatch(fetchRemoveNews(id))
     }
@@ -44,7 +41,7 @@ export const Post = ({
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
-      {isOwner && (
+      {isEditable && (
         <div className={styles.editButtons}>
           <Link to={`/news/${id}/edit`}>
             <IconButton color="primary">
